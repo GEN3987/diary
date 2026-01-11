@@ -1,0 +1,57 @@
+[
+  {
+    "date": "2026.01.11",
+    "word": "始まり",
+    "color": "#81C784",
+    "mood": "point"
+  },
+  {
+    "date": "yyyy.mm.dd",
+    "word": "calm",
+    "color": "#000000",
+    "mood": "calm"
+  },
+  {
+    "date": "yyyy.mm.dd",
+    "word": "heart",
+    "color": "#000000",
+    "mood": "heart"
+  },
+  {
+    "date": "yyyy.mm.dd",
+    "word": "hm",
+    "color": "#000000",
+    "mood": "hm"
+  },
+  {
+    "date": "yyyy.mm.dd",
+    "word": "piano",
+    "color": "#000000",
+    "mood": "piano"
+  },
+  {
+    "date": "yyyy.mm.dd",
+    "word": "pluck",
+    "color": "#000000",
+    "mood": "pluck"
+  },
+  {
+    "date": "yyyy.mm.dd",
+    "word": "scar",
+    "color": "#000000",
+    "mood": "scar"
+  },
+  {
+    "date": "yyyy.mm.dd",
+    "word": "un",
+    "color": "#000000",
+    "mood": "un"
+  },
+  {
+    "date": "yyyy.mm.dd",
+    "word": "voice",
+    "color": "#000000",
+    "mood": "voice"
+  }
+]
+  
