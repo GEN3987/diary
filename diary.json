@@ -1,57 +1,45 @@
 [
   {
     "date": "2026.01.11",
-    "word": "始まり",
+    "word": "Diary始まり",
     "color": "#81C784",
     "mood": "point"
   },
   {
-    "date": "yyyy.mm.dd",
-    "word": "calm",
-    "color": "#000000",
-    "mood": "calm"
-  },
-  {
-    "date": "yyyy.mm.dd",
-    "word": "heart",
-    "color": "#000000",
-    "mood": "heart"
-  },
-  {
-    "date": "yyyy.mm.dd",
-    "word": "hm",
-    "color": "#000000",
-    "mood": "hm"
-  },
-  {
-    "date": "yyyy.mm.dd",
-    "word": "piano",
-    "color": "#000000",
-    "mood": "piano"
-  },
-  {
-    "date": "yyyy.mm.dd",
-    "word": "pluck",
-    "color": "#000000",
-    "mood": "pluck"
-  },
-  {
-    "date": "yyyy.mm.dd",
-    "word": "scar",
-    "color": "#000000",
+    "date": "2026.01.10",
+    "word": "繄張した",
+    "color": "#5b9eeb",
     "mood": "scar"
   },
   {
-    "date": "yyyy.mm.dd",
-    "word": "un",
-    "color": "#000000",
-    "mood": "un"
+    "date": "2025.09.26",
+    "word": "Trifourlium vol.1",
+    "color": "#c7103b",
+    "mood": "heart"
   },
   {
-    "date": "yyyy.mm.dd",
-    "word": "voice",
-    "color": "#000000",
+    "date": "2025.12.06",
+    "word": "Trifourlium vol.2",
+    "color": "#e5e827",
+    "mood": "pluck"
+  },
+  {
+    "date": "2025.10.26",
+    "word": "M3",
+    "color": "#38f2b1",
     "mood": "voice"
+  },
+  {
+    "date": "2025.09.22",
+    "word": "Perfume",
+    "color": "#f0f0f0",
+    "mood": "point"
+  },
+  {
+    "date": "2025.06.02",
+    "word": "ghostclubよかった",
+    "color": "#2c447d",
+    "mood": "un"
   }
 ]
   
