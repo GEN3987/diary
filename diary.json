@@ -3,44 +3,52 @@
     "date": "2026.01.11",
     "word": "始まり",
     "color": "#81C784",
-    "mood": "point"
+    "mood": "point",
+    "detail":"日記サイト作った。aiやべー"
   },
   {
     "date": "2026.01.10",
     "word": "繄張した",
     "color": "#5b9eeb",
-    "mood": "scar"
+    "mood": "scar",
+    "detail":"リアルのでかいやつが1つ終わって安心"
   },
   {
     "date": "2025.09.26",
     "word": "Trifourlium vol.1",
     "color": "#c7103b",
-    "mood": "heart"
+    "mood": "pluck",
+    "detail":"記念すべき一回目！フライヤー作った！"
   },
   {
     "date": "2025.12.06",
     "word": "Trifourlium vol.2",
     "color": "#e5e827",
-    "mood": "pluck"
+    "mood": "pluck",
+    "detail":"二回目！インスタンス満杯になってた。めっちゃしゃべった"
   },
   {
     "date": "2025.10.26",
     "word": "M3",
     "color": "#38f2b1",
-    "mood": "voice"
+    "mood": "voice",
+    "detail":"お世話になってる方にあいさつした。"
   },
   {
     "date": "2025.09.22",
     "word": "Perfume",
     "color": "#f0f0f0",
-    "mood": "point"
+    "mood": "point",
+    "detail":"Perfumeコールドスリープ前最後のライブ見に行った！めっちゃよかった！帰ってくるの待ってます！！"
   },
   {
     "date": "2025.06.02",
-    "word": "ghostclubよかった",
+    "word": "GHOSTCLUBよかった",
     "color": "#2c447d",
-    "mood": "un"
+    "mood": "un",
+    "detail":"gaburyuさん,peyodaさん,higmaさんのdjめっちゃよかった！リアルでも聞きに行きたい！"
   }
 ]
   
+
 

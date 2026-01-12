@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Diary Data Generator</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #fdfdfd; display: flex; justify-content: center; padding: 40px; color: #333; }
+        .card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.05); width: 100%; max-width: 500px; border: 1px solid #eee; }
+        h2 { font-size: 16px; letter-spacing: 0.3em; color: #aaa; margin-bottom: 30px; text-align: center; }
+        .field { margin-bottom: 25px; }
+        label { display: block; font-size: 10px; color: #bbb; margin-bottom: 8px; font-weight: bold; letter-spacing: 0.1em; }
+        input[type="text"], textarea, select {
+            width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 14px; outline: none; transition: 0.3s;
+        }
+        input:focus, textarea:focus, select:focus { border-color: #64B5F6; background: #f9fcff; }
+        input[type="color"] { width: 100%; height: 45px; border: 1px solid #eee; cursor: pointer; background: none; border-radius: 12px; padding: 5px; }
+        button {
+            width: 100%; padding: 18px; background: #333; color: white; border: none; border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: bold; letter-spacing: 0.2em; transition: 0.3s;
+        }
+        button:hover { background: #64B5F6; transform: translateY(-2px); }
+        .result-area { margin-top: 35px; display: none; border-top: 1px solid #eee; padding-top: 25px; }
+        pre { background: #1a1a1a; color: #81C784; padding: 25px; border-radius: 15px; font-size: 13px; overflow-x: auto; white-space: pre-wrap; line-height: 1.5; }
+        .copy-hint { font-size: 10px; color: #999; margin-top: 15px; text-align: center; line-height: 1.6; }
+        .blue-txt { color: #64B5F6; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>NEW MEMORY</h2>
+    
+    <div class="field">
+        <label>DATE (yyyy.mm.dd)</label>
+        <input type="text" id="date">
+    </div>
+
+    <div class="field">
+        <label>WORD (一言)</label>
+        <input type="text" id="word" placeholder="どんな一日だった？">
+    </div>
+
+    <div class="field">
+        <label>MOOD (サウンド)</label>
+        <select id="mood">
+            <option value="point">point</option>
+            <option value="voice">voice</option>
+            <option value="calm">calm</option>
+            <option value="heart">heart</option>
+            <option value="hm">hm</option>
+            <option value="piano">piano</option>
+            <option value="pluck">pluck</option>
+            <option value="scar">scar</option>
+            <option value="un">un</option>
+        </select>
+    </div>
+
+    <div class="field">
+        <label>COLOR (粒子の色)</label>
+        <input type="color" id="color" value="#64B5F6">
+    </div>
+
+    <div class="field">
+        <label>DETAIL (詳細な記憶)</label>
+        <textarea id="detail" rows="4" placeholder="詳細を記録..."></textarea>
+    </div>
+
+    <button onclick="generateJSON()">GENERATE CODE</button>
+
+    <div id="result-area" class="result-area">
+        <label>JSON OUTPUT:</label>
+        <pre id="output"></pre>
+        <div class="copy-hint">
+            1. 上の緑の文字をすべてコピー<br>
+            2. diary.json の最後にある <span class="blue-txt">]</span> の手前に貼り付け
+        </div>
+    </div>
+</div>
+
+<script>
+    // 初期日付の設定 (yyyy.mm.dd)
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    document.getElementById('date').value = `${y}.${m}.${d}`;
+
+    function generateJSON() {
+        const data = {
+            "date": document.getElementById('date').value,
+            "word": document.getElementById('word').value,
+            "color": document.getElementById('color').value,
+            "mood": document.getElementById('mood').value,
+            "detail": document.getElementById('detail').value
+        };
+
+        // diary.jsonの既存データの末尾にすぐ繋げられるよう、最初にカンマを入れた形式にする
+        const jsonStr = "  ,\n" + JSON.stringify(data, null, 2);
+        document.getElementById('output').textContent = jsonStr;
+        document.getElementById('result-area').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>

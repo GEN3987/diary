@@ -7,7 +7,7 @@
     <style>
         body { margin: 0; overflow: hidden; background: #fdfdfd; font-family: 'Helvetica Neue', Arial, sans-serif; }
         
-        /* ロード画面 */
+        /* --- ロード画面 --- */
         #loader {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -16,7 +16,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 500;
             transition: opacity 1s ease, visibility 1s;
         }
         .loader-dot {
@@ -33,20 +33,26 @@
             text-transform: uppercase;
             margin-bottom: 15px;
         }
-        /* シークバーのスタイル */
         #progress-container {
-            width: 200px;
-            height: 2px;
+            width: 200px; height: 2px;
             background: #eee;
             border-radius: 1px;
             overflow: hidden;
             position: relative;
         }
         #progress-bar {
-            width: 0%; /* JSで制御 */
+            width: 0%;
             height: 100%;
             background: linear-gradient(90deg, #FFB74D, #81C784, #64B5F6);
             transition: width 0.3s ease;
+        }
+        #enter-msg {
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            font-size: 10px;
+            color: #64B5F6;
+            letter-spacing: 0.1em;
         }
 
         @keyframes pulse {
@@ -56,6 +62,38 @@
             100% { transform: scale(1); background: #FFB74D; box-shadow: 0 0 10px #FFB74D; }
         }
 
+        /* --- 検索窓 (追加) --- */
+        #search-container {
+            position: fixed;
+            top: 40px;
+            right: 50px;
+            z-index: 100;
+            width: 180px;
+        }
+        #search-input {
+            background: transparent;
+            border: none;
+            color: #333;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            width: 100%;
+            outline: none;
+            padding: 8px 0;
+            text-transform: uppercase;
+        }
+        #search-input::placeholder { color: #ccc; }
+        #search-line {
+            height: 1px;
+            width: 20px;
+            background: #eee;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #search-input:focus + #search-line {
+            width: 100%;
+            background: #64B5F6;
+        }
+
+        /* --- メインUI --- */
         #bg-canvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -71,6 +109,8 @@
             opacity: 0.08;
             background-image: url('https://grainy-gradients.vercel.app/noise.svg');
         }
+
+        /* --- 簡易ツールチップ --- */
         #tooltip {
             position: absolute;
             pointer-events: none;
@@ -88,24 +128,173 @@
         }
         #tooltip h3 { margin: 0 0 4px 0; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 2px; }
         #tooltip p { margin: 0; font-size: 18px; font-weight: 500; color: #333; }
+
+        /* --- 詳細オーバーレイ --- */
+        #detail-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            z-index: 200;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            justify-content: center;
+            align-items: center;
+        }
+        #detail-view {
+            width: 85%; max-width: 480px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 35px;
+            padding: 40px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.06);
+            transform: translateY(30px);
+            transition: transform 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+        }
+        #detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; }
+        #detail-info { display: flex; align-items: center; gap: 15px; }
+        #detail-date { font-size: 11px; letter-spacing: 0.3em; color: #999; font-weight: bold; }
+        #detail-day { font-size: 9px; color: #bbb; letter-spacing: 0.1em; }
+        #mood-icon { width: 32px; height: 32px; object-fit: contain; opacity: 0.8; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.05)); }
+        #detail-close { font-size: 10px; cursor: pointer; color: #bbb; letter-spacing: 0.1em; padding: 5px 12px; border: 1px solid #eee; border-radius: 20px; transition: 0.3s; }
+        #detail-close:hover { background: #f5f5f5; color: #333; }
+        #detail-word { font-size: 28px; font-weight: 600; margin: 0 0 15px 0; color: #222; }
+        #detail-text-container { max-height: 150px; overflow-y: auto; margin-bottom: 35px; padding-right: 15px; }
+        #detail-description { font-size: 14px; line-height: 2.0; color: #555; margin: 0; white-space: pre-wrap; }
+
+        /* ビジュアルセクション */
+        #detail-visual { display: flex; align-items: center; gap: 35px; border-top: 1px solid #f0f0f0; padding-top: 35px; }
+        .color-stack { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        #color-preview { width: 65px; height: 65px; border-radius: 50%; box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
+        #complementary-preview { width: 22px; height: 22px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        #rgb-params { flex-grow: 1; }
+        .rgb-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 10px; color: #999; font-weight: 800; }
+        .bar-bg { flex-grow: 1; height: 4px; background: #f0f0f0; border-radius: 2px; overflow: hidden; }
+        .bar-fill { height: 100%; width: 0%; transition: width 1.2s cubic-bezier(0.1, 1, 0.1, 1); }
+        #bar-r { background: #ff8a80; }
+        #bar-g { background: #81c784; }
+        #bar-b { background: #64b5f6; }
+
+        /* 関連リスト */
+        #related-memories { margin-top: 35px; border-top: 1px solid #f0f0f0; padding-top: 25px; }
+        #related-memories h4 { font-size: 9px; color: #bbb; letter-spacing: 0.2em; margin: 0 0 15px 0; }
+        #related-list { display: flex; gap: 10px; flex-wrap: wrap; }
+        .related-item { font-size: 10px; padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: 0.3s; letter-spacing: 0.05em; font-weight: bold; }
+        .related-item:hover { transform: scale(1.05); filter: brightness(1.1); }
+
+        /* --- 下部UI --- */
+        #ui-container {
+            position: fixed;
+            bottom: 40px;
+            width: 100%;
+            padding: 0 50px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 5;
+            pointer-events: none;
+            mix-blend-mode: difference;
+        }
+        #stats-panel { color: #fff; font-size: 10px; letter-spacing: 0.2em; text-align: left; }
+        .stat-item { margin-bottom: 6px; opacity: 0.7; }
+        #recall-button {
+            pointer-events: auto;
+            cursor: pointer;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+        #recall-button:hover { opacity: 1; transform: scale(1.1); }
+        #recall-button span { font-size: 9px; margin-top: 6px; letter-spacing: 0.15em; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="loader">
-    <div class="loader-dot"></div>
-    <p id="loader-text">Loading GEN3987 Memories</p>
-    <div id="progress-container">
-        <div id="progress-bar"></div>
+    <div id="loader">
+        <div class="loader-dot"></div>
+        <p id="loader-text">Loading GEN3987 Memories</p>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+        <p id="enter-msg">Press [ ENTER ] or Click to Start</p>
     </div>
-    <p id="enter-msg" style="margin-top: 20px; opacity: 0; transition: opacity 0.5s; font-size: 10px; color: #64B5F6;">
-        Press [ ENTER ] or Click to Start
-    </p>
-</div>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="SEARCH MEMORY..." autocomplete="off">
+        <div id="search-line"></div>
+    </div>
+
+    <div id="ui-container">
+        <div id="stats-panel">
+            <div class="stat-item">TOTAL: <span id="stat-total">0</span></div>
+            <div class="stat-item">DOMINANT MOOD: <span id="stat-mood">-</span></div>
+        </div>
+        <div id="recall-button" onclick="recallRandomMemory()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+                <path d="M21 3v5h-5"></path>
+            </svg>
+            <span>RECALL</span>
+        </div>
+    </div>
 
     <div id="tooltip">
         <h3 id="t-date"></h3>
         <p id="t-word"></p>
+    </div>
+
+    <div id="detail-overlay" onclick="closeDetail()">
+        <div id="detail-view" onclick="event.stopPropagation()">
+            <div id="detail-header">
+                <div id="detail-info">
+                    <img id="mood-icon" src="" alt="">
+                    <div>
+                        <div id="detail-date"></div>
+                        <div id="detail-day"></div>
+                    </div>
+                </div>
+                <div id="detail-close" onclick="closeDetail()">CLOSE ×</div>
+            </div>
+            
+            <div id="detail-content">
+                <p id="detail-word"></p>
+                <div id="detail-text-container">
+                    <p id="detail-description"></p>
+                </div>
+            </div>
+
+            <div id="detail-visual">
+                <div class="color-stack">
+                    <div id="color-preview"></div>
+                    <div id="complementary-preview" title="Complementary Color"></div>
+                </div>
+                <div id="rgb-params">
+                    <div class="rgb-bar-row">
+                        <span>R</span>
+                        <div class="bar-bg"><div id="bar-r" class="bar-fill"></div></div>
+                    </div>
+                    <div class="rgb-bar-row">
+                        <span>G</span>
+                        <div class="bar-bg"><div id="bar-g" class="bar-fill"></div></div>
+                    </div>
+                    <div class="rgb-bar-row">
+                        <span>B</span>
+                        <div class="bar-bg"><div id="bar-b" class="bar-fill"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="related-memories">
+                <h4>RELATED MEMORIES</h4>
+                <div id="related-list"></div>
+            </div>
+        </div>
     </div>
 
     <canvas id="bg-canvas"></canvas>
