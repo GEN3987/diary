@@ -62,7 +62,7 @@
             100% { transform: scale(1); background: #FFB74D; box-shadow: 0 0 10px #FFB74D; }
         }
 
-        /* --- 検索窓 (追加) --- */
+        /* --- 検索窓 --- */
         #search-container {
             position: fixed;
             top: 40px;
@@ -98,7 +98,13 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            filter: contrast(110%) brightness(105%) blur(40px);
+            filter: contrast(105%) brightness(105%) blur(80px) saturate(140%);
+            opacity: 0.6;
+            animation: backgroundPulse 20s infinite alternate ease-in-out;
+        }
+        @keyframes backgroundPulse {
+            0% { transform: scale(1.0); }
+            100% { transform: scale(1.1); }
         }
         #canvas { position: fixed; top: 0; left: 0; z-index: 1; }
         .grain {
@@ -110,7 +116,7 @@
             background-image: url('https://grainy-gradients.vercel.app/noise.svg');
         }
 
-        /* --- 簡易ツールチップ --- */
+        /* --- ツールチップ --- */
         #tooltip {
             position: absolute;
             pointer-events: none;
@@ -164,7 +170,6 @@
         #detail-text-container { max-height: 150px; overflow-y: auto; margin-bottom: 35px; padding-right: 15px; }
         #detail-description { font-size: 14px; line-height: 2.0; color: #555; margin: 0; white-space: pre-wrap; }
 
-        /* ビジュアルセクション */
         #detail-visual { display: flex; align-items: center; gap: 35px; border-top: 1px solid #f0f0f0; padding-top: 35px; }
         .color-stack { display: flex; flex-direction: column; align-items: center; gap: 12px; }
         #color-preview { width: 65px; height: 65px; border-radius: 50%; box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
@@ -177,7 +182,6 @@
         #bar-g { background: #81c784; }
         #bar-b { background: #64b5f6; }
 
-        /* 関連リスト */
         #related-memories { margin-top: 35px; border-top: 1px solid #f0f0f0; padding-top: 25px; }
         #related-memories h4 { font-size: 9px; color: #bbb; letter-spacing: 0.2em; margin: 0 0 15px 0; }
         #related-list { display: flex; gap: 10px; flex-wrap: wrap; }
