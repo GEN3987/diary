@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diary</title>
+    <title>Diary GEN3987 Memories</title>
     <style>
         body { margin: 0; overflow: hidden; background: #fdfdfd; font-family: 'Helvetica Neue', Arial, sans-serif; }
         
@@ -167,8 +167,27 @@
         #detail-close { font-size: 10px; cursor: pointer; color: #bbb; letter-spacing: 0.1em; padding: 5px 12px; border: 1px solid #eee; border-radius: 20px; transition: 0.3s; }
         #detail-close:hover { background: #f5f5f5; color: #333; }
         #detail-word { font-size: 28px; font-weight: 600; margin: 0 0 15px 0; color: #222; }
-        #detail-text-container { max-height: 150px; overflow-y: auto; margin-bottom: 35px; padding-right: 15px; }
+        #detail-text-container { max-height: 150px; overflow-y: auto; margin-bottom: 10px; padding-right: 15px; }
         #detail-description { font-size: 14px; line-height: 2.0; color: #555; margin: 0; white-space: pre-wrap; }
+
+        /* URLリンク */
+        #detail-link-container { margin-bottom: 35px; }
+        #detail-link { 
+            display: inline-flex;
+            align-items: center;
+            font-size: 11px;
+            color: #333;
+            text-decoration: none;
+            padding: 8px 0;
+            transition: 0.3s;
+            font-weight: bold;
+            opacity: 0.6;
+            letter-spacing: 0.1em;
+        }
+        #detail-link:hover { 
+            opacity: 1;
+            color: #64B5F6;
+        }
 
         #detail-visual { display: flex; align-items: center; gap: 35px; border-top: 1px solid #f0f0f0; padding-top: 35px; }
         .color-stack { display: flex; flex-direction: column; align-items: center; gap: 12px; }
@@ -190,29 +209,16 @@
 
         /* --- 下部UI --- */
         #ui-container {
-            position: fixed;
-            bottom: 40px;
-            width: 100%;
-            padding: 0 50px;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            z-index: 5;
-            pointer-events: none;
-            mix-blend-mode: difference;
+            position: fixed; bottom: 40px; width: 100%; padding: 0 50px;
+            box-sizing: border-box; display: flex; justify-content: space-between;
+            align-items: flex-end; z-index: 5; pointer-events: none; mix-blend-mode: difference;
         }
         #stats-panel { color: #fff; font-size: 10px; letter-spacing: 0.2em; text-align: left; }
         .stat-item { margin-bottom: 6px; opacity: 0.7; }
         #recall-button {
-            pointer-events: auto;
-            cursor: pointer;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            opacity: 0.5;
-            transition: 0.3s;
+            pointer-events: auto; cursor: pointer; color: #fff;
+            display: flex; flex-direction: column; align-items: center;
+            opacity: 0.5; transition: 0.3s;
         }
         #recall-button:hover { opacity: 1; transform: scale(1.1); }
         #recall-button span { font-size: 9px; margin-top: 6px; letter-spacing: 0.15em; font-weight: bold; }
@@ -223,9 +229,7 @@
     <div id="loader">
         <div class="loader-dot"></div>
         <p id="loader-text">Loading GEN3987 Memories</p>
-        <div id="progress-container">
-            <div id="progress-bar"></div>
-        </div>
+        <div id="progress-container"><div id="progress-bar"></div></div>
         <p id="enter-msg">Press [ ENTER ] or Click to Start</p>
     </div>
 
@@ -270,6 +274,9 @@
                 <p id="detail-word"></p>
                 <div id="detail-text-container">
                     <p id="detail-description"></p>
+                </div>
+                <div id="detail-link-container">
+                    <a id="detail-link" href="#" target="_blank">VIEW SOURCE ↗</a>
                 </div>
             </div>
 

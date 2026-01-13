@@ -19,6 +19,8 @@ const colorPreview = document.getElementById('color-preview');
 const complementaryPreview = document.getElementById('complementary-preview');
 const relatedList = document.getElementById('related-list');
 const moodIcon = document.getElementById('mood-icon');
+const detailLinkContainer = document.getElementById('detail-link-container');
+const detailLink = document.getElementById('detail-link');
 
 let particles = [];
 let audioMap = {};
@@ -130,47 +132,38 @@ function updateStats(data) {
         acc[entry.mood] = (acc[entry.mood] || 0) + 1;
         return acc;
     }, {});
-    const dominant = Object.keys(moodCounts).reduce((a, b) => moodCounts[a] > moodCounts[b] ? a : b, "-");
+    const dominantKeys = Object.keys(moodCounts);
+    const dominant = dominantKeys.length > 0 ? dominantKeys.reduce((a, b) => moodCounts[a] > moodCounts[b] ? a : b) : "-";
     statMood.textContent = dominant.toUpperCase();
 }
 
-// --- 【挙動修正版】Particleクラス：衝突回避＆境界ガード ---
 class Particle {
     constructor(data) {
         this.data = data;
-        // 最初から中央寄りに配置
         this.x = canvas.width * 0.2 + Math.random() * canvas.width * 0.6;
         this.y = canvas.height * 0.2 + Math.random() * canvas.height * 0.6;
         this.color = data.color;
-        
         this.angle = Math.random() * Math.PI * 2;
         this.velocity = 0.01 + Math.random() * 0.02;
-        
         this.baseVx = (Math.random() - 0.5) * 0.3;
         this.baseVy = (Math.random() - 0.5) * 0.3;
         this.vx = this.baseVx;
         this.vy = this.baseVy;
-        
         this.baseRadius = 14;
         this.radius = this.baseRadius;
         this.isHovered = false;
-        this.friction = 0.95; // 少し粘り気をもたせる
+        this.friction = 0.95; 
         this.alpha = 0.6;
-        
         this.breathPhase = Math.random() * Math.PI * 2;
         this.breathSpeed = 0.02 + Math.random() * 0.03;
     }
 
     update() {
         if (!isStarted) return;
-
         const isMatch = !searchQuery || this.data.word.toLowerCase().includes(searchQuery) || (this.data.detail && this.data.detail.toLowerCase().includes(searchQuery));
-        
-        // 1. 透明度の更新
         const targetAlpha = isMatch ? (this.isHovered ? 1.0 : 0.6) : 0.05;
         this.alpha += (targetAlpha - this.alpha) * 0.1;
 
-        // 2. マウスとのインタラクション
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -183,44 +176,34 @@ class Particle {
             this.isHovered = false;
         }
 
-        // --- 3. 重なり防止（他の粒子と離れる力） ---
         particles.forEach(other => {
             if (this === other) return;
             const odx = other.x - this.x;
             const ody = other.y - this.y;
             const oDist = Math.sqrt(odx * odx + ody * ody);
-            // 粒子同士の最小距離（半径＋α）
             const minDist = (this.radius + other.radius) * 1.8; 
             if (oDist < minDist) {
                 const force = (minDist - oDist) / minDist;
                 const angle = Math.atan2(ody, odx);
-                // 相手から遠ざかる方向に力を加える
                 this.vx -= Math.cos(angle) * force * 0.5;
                 this.vy -= Math.sin(angle) * force * 0.5;
             }
         });
 
-        // --- 4. 境界ガード（端から押し戻す力） ---
-        const margin = 100; // 端から100px以内に入ったら
-        const pushForce = 0.05;
-        if (this.x < margin) this.vx += (margin - this.x) * pushForce;
-        if (this.x > canvas.width - margin) this.vx -= (this.x - (canvas.width - margin)) * pushForce;
-        if (this.y < margin) this.vy += (margin - this.y) * pushForce;
-        if (this.y > canvas.height - margin) this.vy -= (this.y - (canvas.height - margin)) * pushForce;
+        const margin = 120; 
+        if (this.x < margin) this.vx += (margin - this.x) * 0.04;
+        if (this.x > canvas.width - margin) this.vx -= (this.x - (canvas.width - margin)) * 0.04;
+        if (this.y < margin) this.vy += (margin - this.y) * 0.04;
+        if (this.y > canvas.height - margin) this.vy -= (this.y - (canvas.height - margin)) * 0.04;
 
-        // 5. 速度の反映と摩擦
         this.vx *= this.friction;
         this.vy *= this.friction;
-        
-        // 固有のゆらぎ
         this.angle += this.velocity;
         this.vx += Math.sin(this.angle) * 0.05;
         this.vy += Math.cos(this.angle * 0.8) * 0.05;
-
         this.x += this.vx;
         this.y += this.vy;
 
-        // 6. 呼吸（サイズ）
         this.breathPhase += this.breathSpeed;
         const breath = Math.sin(this.breathPhase) * 2;
         const targetRadius = isMatch && this.isHovered ? this.baseRadius * 2.5 : this.baseRadius + breath;
@@ -235,15 +218,12 @@ class Particle {
         ctx.globalAlpha = this.alpha;
         ctx.fillStyle = this.color;
         if (this.isHovered && searchQuery === "") {
-            ctx.shadowBlur = 40;
-            ctx.shadowColor = this.color;
+            ctx.shadowBlur = 40; ctx.shadowColor = this.color;
         }
         ctx.fill();
         ctx.restore();
     }
 }
-
-// --- 共通ユーティリティ ---
 
 function typeWriter(text, element) {
     element.textContent = "";
@@ -276,6 +256,18 @@ function openDetail(p) {
     const iconName = `mood-${data.mood.toLowerCase()}.png`;
     moodIcon.src = `icons/${iconName}`;
     moodIcon.style.display = 'block';
+
+    // リンク表示の更新と色の同期
+    if (data.link) {
+        detailLinkContainer.style.display = 'block';
+        detailLink.href = data.link;
+        // ホバーしてない時の色は薄いグレーのままだが、
+        // JSでホバー時の色を日記色に変える小技
+        detailLink.onmouseover = () => { detailLink.style.color = data.color; };
+        detailLink.onmouseout = () => { detailLink.style.color = '#333'; };
+    } else {
+        detailLinkContainer.style.display = 'none';
+    }
 
     relatedList.innerHTML = "";
     const relatives = particles.filter(other => other.data.mood === data.mood && other !== p).slice(0, 3);

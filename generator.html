@@ -2,101 +2,116 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Diary Data Generator</title>
+    <title>GEN3987 - Memory Generator</title>
     <style>
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #fdfdfd; display: flex; justify-content: center; padding: 40px; color: #333; }
-        .card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.05); width: 100%; max-width: 500px; border: 1px solid #eee; }
-        h2 { font-size: 16px; letter-spacing: 0.3em; color: #aaa; margin-bottom: 30px; text-align: center; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; padding: 40px; background: #fdfdfd; color: #333; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 450px; background: white; padding: 40px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
+        h2 { font-size: 14px; letter-spacing: 0.3em; color: #999; text-align: center; margin-bottom: 40px; text-transform: uppercase; }
+        
         .field { margin-bottom: 25px; }
-        label { display: block; font-size: 10px; color: #bbb; margin-bottom: 8px; font-weight: bold; letter-spacing: 0.1em; }
-        input[type="text"], textarea, select {
-            width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 14px; outline: none; transition: 0.3s;
+        label { display: block; font-size: 10px; font-weight: 800; margin-bottom: 10px; color: #bbb; letter-spacing: 0.15em; text-transform: uppercase; }
+        
+        input, textarea, select { 
+            width: 100%; padding: 15px; border: 1px solid #f0f0f0; border-radius: 12px; 
+            box-sizing: border-box; font-size: 14px; background: #fafafa; transition: 0.3s;
         }
-        input:focus, textarea:focus, select:focus { border-color: #64B5F6; background: #f9fcff; }
-        input[type="color"] { width: 100%; height: 45px; border: 1px solid #eee; cursor: pointer; background: none; border-radius: 12px; padding: 5px; }
-        button {
-            width: 100%; padding: 18px; background: #333; color: white; border: none; border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: bold; letter-spacing: 0.2em; transition: 0.3s;
+        input:focus, textarea:focus { outline: none; border-color: #64B5F6; background: #fff; }
+        
+        button { 
+            width: 100%; padding: 18px; border: none; border-radius: 15px; 
+            cursor: pointer; font-weight: bold; font-size: 12px; letter-spacing: 0.2em;
+            transition: 0.3s; background: #333; color: white; margin-top: 10px;
         }
-        button:hover { background: #64B5F6; transform: translateY(-2px); }
-        .result-area { margin-top: 35px; display: none; border-top: 1px solid #eee; padding-top: 25px; }
-        pre { background: #1a1a1a; color: #81C784; padding: 25px; border-radius: 15px; font-size: 13px; overflow-x: auto; white-space: pre-wrap; line-height: 1.5; }
-        .copy-hint { font-size: 10px; color: #999; margin-top: 15px; text-align: center; line-height: 1.6; }
-        .blue-txt { color: #64B5F6; font-weight: bold; }
+        button:hover { background: #64B5F6; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(100, 181, 246, 0.2); }
+        
+        #output-area { margin-top: 30px; display: none; }
+        #json-output { 
+            width: 100%; height: 120px; font-family: monospace; font-size: 11px; 
+            background: #222; color: #81C784; padding: 15px; border-radius: 10px; border: none;
+            margin-top: 10px; white-space: pre; overflow-x: auto;
+        }
+        .copy-hint { font-size: 9px; color: #999; text-align: center; margin-top: 8px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>NEW MEMORY</h2>
+<div class="container">
+    <h2>Memory Generator</h2>
     
     <div class="field">
-        <label>DATE (yyyy.mm.dd)</label>
-        <input type="text" id="date">
+        <label>Date</label>
+        <input type="date" id="date">
     </div>
 
     <div class="field">
-        <label>WORD (一言)</label>
-        <input type="text" id="word" placeholder="どんな一日だった？">
+        <label>Word</label>
+        <input type="text" id="word" placeholder="Title of the memory">
     </div>
 
     <div class="field">
-        <label>MOOD (サウンド)</label>
+        <label>Mood</label>
         <select id="mood">
-            <option value="point">point</option>
-            <option value="voice">voice</option>
-            <option value="calm">calm</option>
-            <option value="heart">heart</option>
-            <option value="hm">hm</option>
-            <option value="piano">piano</option>
-            <option value="pluck">pluck</option>
-            <option value="scar">scar</option>
-            <option value="un">un</option>
+            <option value="calm">CALM</option>
+            <option value="energetic">ENERGETIC</option>
+            <option value="melancholy">MELANCHOLY</option>
+            <option value="mysterious">MYSTERIOUS</option>
+            <option value="warm">WARM</option>
         </select>
     </div>
 
     <div class="field">
-        <label>COLOR (粒子の色)</label>
-        <input type="color" id="color" value="#64B5F6">
+        <label>Color</label>
+        <input type="color" id="color" value="#64B5F6" style="height: 50px; padding: 5px; cursor: pointer;">
     </div>
 
     <div class="field">
-        <label>DETAIL (詳細な記憶)</label>
-        <textarea id="detail" rows="4" placeholder="詳細を記録..."></textarea>
+        <label>Detail Text</label>
+        <textarea id="detail" rows="3" placeholder="Description..."></textarea>
     </div>
 
-    <button onclick="generateJSON()">GENERATE CODE</button>
+    <div class="field">
+        <label>Source Link (URL)</label>
+        <input type="url" id="link" placeholder="https://...">
+    </div>
 
-    <div id="result-area" class="result-area">
-        <label>JSON OUTPUT:</label>
-        <pre id="output"></pre>
-        <div class="copy-hint">
-            1. 上の緑の文字をすべてコピー<br>
-            2. diary.json の最後にある <span class="blue-txt">]</span> の手前に貼り付け
-        </div>
+    <button onclick="generateJSON()">GENERATE JSON DATA</button>
+
+    <div id="output-area">
+        <label>Result (Copy this to diary.json)</label>
+        <textarea id="json-output" readonly></textarea>
+        <div class="copy-hint">※これをコピーして diary.json の [ ] 内に追加してください</div>
     </div>
 </div>
 
 <script>
-    // 初期日付の設定 (yyyy.mm.dd)
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, '0');
-    const d = String(now.getDate()).padStart(2, '0');
-    document.getElementById('date').value = `${y}.${m}.${d}`;
+    // 初期値として今日の日付を設定
+    document.getElementById('date').valueAsDate = new Date();
 
     function generateJSON() {
-        const data = {
-            "date": document.getElementById('date').value,
-            "word": document.getElementById('word').value,
-            "color": document.getElementById('color').value,
-            "mood": document.getElementById('mood').value,
-            "detail": document.getElementById('detail').value
+        const entry = {
+            date: document.getElementById('date').value,
+            word: document.getElementById('word').value,
+            mood: document.getElementById('mood').value,
+            color: document.getElementById('color').value,
+            detail: document.getElementById('detail').value,
+            link: document.getElementById('link').value
         };
 
-        // diary.jsonの既存データの末尾にすぐ繋げられるよう、最初にカンマを入れた形式にする
-        const jsonStr = "  ,\n" + JSON.stringify(data, null, 2);
-        document.getElementById('output').textContent = jsonStr;
-        document.getElementById('result-area').style.display = 'block';
+        if (!entry.word) {
+            alert("WORDを入力してください");
+            return;
+        }
+
+        // JSONを表示
+        const outputArea = document.getElementById('output-area');
+        const outputText = document.getElementById('json-output');
+        
+        // diary.jsonにそのまま貼り付けやすい形式で表示
+        outputText.value = JSON.stringify(entry, null, 2) + ",";
+        outputArea.style.display = 'block';
+        
+        // 自動選択してコピーしやすくする
+        outputText.select();
     }
 </script>
 
