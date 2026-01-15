@@ -49,13 +49,17 @@
     </div>
 
     <div class="field">
-        <label>Mood</label>
+        <label>Mood (Sound Source)</label>
         <select id="mood">
+            <option value="point">POINT</option>
+            <option value="voice">VOICE</option>
             <option value="calm">CALM</option>
-            <option value="energetic">ENERGETIC</option>
-            <option value="melancholy">MELANCHOLY</option>
-            <option value="mysterious">MYSTERIOUS</option>
-            <option value="warm">WARM</option>
+            <option value="heart">HEART</option>
+            <option value="hm">HM</option>
+            <option value="piano">PIANO</option>
+            <option value="pluck">PLUCK</option>
+            <option value="scar">SCAR</option>
+            <option value="un">UN</option>
         </select>
     </div>
 
@@ -84,7 +88,6 @@
 </div>
 
 <script>
-    // 初期値として今日の日付を設定
     document.getElementById('date').valueAsDate = new Date();
 
     function generateJSON() {
@@ -102,15 +105,11 @@
             return;
         }
 
-        // JSONを表示
         const outputArea = document.getElementById('output-area');
         const outputText = document.getElementById('json-output');
         
-        // diary.jsonにそのまま貼り付けやすい形式で表示
         outputText.value = JSON.stringify(entry, null, 2) + ",";
         outputArea.style.display = 'block';
-        
-        // 自動選択してコピーしやすくする
         outputText.select();
     }
 </script>
